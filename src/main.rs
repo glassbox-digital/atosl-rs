@@ -1,10 +1,8 @@
 //
 // written by everettjf
 // email : everettjf@live.com
-// created at 2022-01-01
 //
 mod atosl;
-mod demangle;
 
 use anyhow::Result;
 use clap::Parser;

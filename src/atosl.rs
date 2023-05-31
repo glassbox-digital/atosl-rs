@@ -3,7 +3,6 @@
 // email : everettjf@live.com
 // created at 2022-01-01
 //
-use crate::demangle;
 use anyhow::{anyhow, Result};
 use gimli::{DW_TAG_subprogram, DebugInfoOffset, Dwarf, EndianSlice, RunTimeEndian};
 use object::{Object, ObjectSection, ObjectSegment};
@@ -133,8 +132,8 @@ fn symbol_symbolize_address(
         // expect format
         // main (in BinaryName)
         let offset = search_address - found_symbol.address();
-        let demangled_name = demangle::demangle_symbol(found_symbol.name());
-        let symbolize_result = format!("{} (in {}) + {}", demangled_name, object_filename, offset);
+        let symbol_name = found_symbol.name();
+        let symbolize_result = format!("{} (in {}) + {}", symbol_name, object_filename, offset);
         return Ok(symbolize_result);
     }
 
@@ -379,10 +378,9 @@ fn dwarf_symbolize_address(
         // expect format
         // main (in BinaryName) (main.m:100)
 
-        let demangled_name = demangle::demangle_symbol(&symbol_name);
         let symbolize_result = format!(
             "{} (in {}) ({}:{})",
-            demangled_name, object_filename, file_name, line
+            symbol_name, object_filename, file_name, line
         );
         return Ok(symbolize_result);
     }
